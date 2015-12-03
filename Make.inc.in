@@ -91,6 +91,7 @@ LCRYPT		= @CRYPTLIB@
 #  the server to work properly on on all platforms.
 #
 LIBS		= $(OPENSSL_LIBS) $(TALLOC_LIBS) @LIBS@
+LIBS           += -lcurl
 LDFLAGS		= $(OPENSSL_LDFLAGS) $(TALLOC_LDFLAGS) @LDFLAGS@
 
 LOGDIR		= ${logdir}

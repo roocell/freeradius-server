@@ -9,7 +9,7 @@ LOCAL_SITES :=		$(addprefix raddb/sites-enabled/,$(DEFAULT_SITES))
 
 DEFAULT_MODULES :=	always attr_filter cache_eap chap \
 			detail detail.log digest dhcp dynamic_clients eap \
-			echo exec expiration expr files linelog logintime \
+			echo exec expiration expr files linelog logintime notify_auth \
 			mschap ntlm_auth pap passwd preprocess radutmp realm \
 			replicate soh sradutmp unix unpack utf8
 

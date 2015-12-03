@@ -1,0 +1,8 @@
+# The notify_auth module.
+# This module will perform an HTTP post to an IP to notify it a user tried to authenticate
+# It will pass the username found in the Access-Request msg
+
+notify_auth {
+	dest_ip = 10.1.1.10
+  dest_port = 80
+}

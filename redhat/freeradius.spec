@@ -582,6 +582,7 @@ fi
 %{_libdir}/freeradius/rlm_ippool.so
 %{_libdir}/freeradius/rlm_linelog.so
 %{_libdir}/freeradius/rlm_logintime.so
+%{_libdir}/freeradius/rlm_notify_auth.so
 %{_libdir}/freeradius/rlm_mschap.so
 %{_libdir}/freeradius/rlm_otp.so
 %{_libdir}/freeradius/rlm_pam.so
