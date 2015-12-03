@@ -44,8 +44,8 @@ char str[INET_ADDRSTRLEN];
 
 	UNUSED_(cs);
 
-  inst->ipaddr = htonl(*((uint32_t *)(&(inst->fr_ipaddr.ipaddr.ip4addr))));
-inet_ntop(AF_INET, &(inst->ipaddr), str, INET_ADDRSTRLEN);
+inst->ipaddr = *((uint32_t *)(&(inst->fr_ipaddr.ipaddr.ip4addr)));
+//inet_ntop(AF_INET, &(inst->ipaddr), str, INET_ADDRSTRLEN);
  WARN("notify_auth: %s:%d ipaddr 0x%X[%s]  port %d", __func__, __LINE__, inst->ipaddr, str, inst->port);
 
 curl_global_init(CURL_GLOBAL_ALL);
@@ -97,45 +97,52 @@ static rlm_rcode_t CC_HINT(nonnull) mod_post_auth(void *instance, REQUEST *reque
   WARN("%s:%d u:%s p:%s %d", __FILE__, __LINE__,
          (request->username)?request->username->vp_strvalue:"(null)",
          (request->password)?request->password->vp_strvalue:"(null)",
-         request->reply->code 
+         request->reply->code
        );
 
 
   if (request->reply->code == PW_CODE_ACCESS_REJECT)
   {
     // send a msg to the APNS server
- 
+
   } else if (request->reply->code == PW_CODE_ACCESS_ACCEPT) {
-  CURL *curl;
-  CURLcode res;
+      CURL *curl;
+      CURLcode res;
 
-  char url[100];
-  char post[100];
-  char ipstr[INET_ADDRSTRLEN];
+      char url[100];
+      char post[100];
+      char ipstr[INET_ADDRSTRLEN];
 
-  inet_ntop(AF_INET, &(inst->ipaddr), ipstr, INET_ADDRSTRLEN);
-  sprintf(url, "http://%s:%d/simplepush.php", ipstr, inst->port);
-  sprintf(post, "username=%s", (request->username)?request->username->vp_strvalue:"unknown");
- 
-  /* get a curl handle */ 
-  curl = curl_easy_init();
-  if(curl) {
-    /* First set the URL that is about to receive our POST. This URL can
-       just as well be a https:// URL if that is what should receive the
-       data. */ 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    /* Now specify the POST data */ 
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post);
- 
-    /* Perform the request, res will get the return code */ 
-    res = curl_easy_perform(curl);
-    /* Check for errors */ 
-    if(res != CURLE_OK) {
-      WARN("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-    }
- 
-    /* always cleanup */ 
-    curl_easy_cleanup(curl);
+      inet_ntop(AF_INET, &(inst->ipaddr), ipstr, INET_ADDRSTRLEN);
+      sprintf(url, "http://%s:%d/simplepush.php", ipstr, inst->port);
+      sprintf(post, "username=%s", (request->username)?request->username->vp_strvalue:"unknown");
+
+      WARN("%s:%d %s?%s", __FILE__, __LINE__, url, post);
+
+      /* get a curl handle */
+      curl = curl_easy_init();
+      if(curl) {
+        /* First set the URL that is about to receive our POST. This URL can
+           just as well be a https:// URL if that is what should receive the
+           data. */
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        /* Now specify the POST data */
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post);
+        WARN("%s:%d", __FILE__, __LINE__);
+
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 2L);
+
+        /* Perform the request, res will get the return code */
+        res = curl_easy_perform(curl);
+        WARN("%s:%d", __FILE__, __LINE__);
+
+        /* Check for errors */
+        if(res != CURLE_OK) {
+          WARN("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        }
+
+        /* always cleanup */
+        curl_easy_cleanup(curl);
   }
 
 }
