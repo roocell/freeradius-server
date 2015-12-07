@@ -315,6 +315,9 @@ int rad_postauth(REQUEST *request)
 	}
 
 	result = process_post_auth(postauth_type, request);
+
+        WARN("mike %d", result);
+
 	switch (result) {
 	/*
 	 *	The module failed, or said to reject the user: Do so.
@@ -343,6 +346,13 @@ int rad_postauth(REQUEST *request)
 	 */
 	case RLM_MODULE_HANDLED:
 		/* FIXME */
+                // this is just a hack and will prevent the previous reject from being sent.
+                // will also keep the station in authenticating state - so the sentinel will have time do allow them
+
+                WARN("%s:%d %d", __func__, __LINE__, result);
+                request->reply->code = PW_CODE_STATUS_SERVER;   
+                fr_state_put_vps(request, request->packet, request->reply);
+                result = RLM_MODULE_OK;
 		break;
 	/*
 	 *	The module had a number of OK return codes.
