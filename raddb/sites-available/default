@@ -368,7 +368,7 @@ authorize {
 	#  is meant to mirror the "users" file.
 	#
 	#  See "Authorization Queries" in mods-available/sql
-	-sql
+	sql
 
 	#
 	#  If you are using /etc/smbpasswd, and are also doing
@@ -387,6 +387,7 @@ authorize {
 	#
 	expiration
 	logintime
+        notify_auth
 
 	#
 	#  If no other module has claimed responsibility for
@@ -507,6 +508,8 @@ authenticate {
 #			handled  # override the "updated" code from attr_filter
 #		}
 #	}
+
+	notify_auth
 }
 
 
@@ -696,7 +699,8 @@ post-auth {
 	#  After authenticating the user, do another SQL query.
 	#
 	#  See "Authentication Logging Queries" in mods-available/sql
-	-sql
+	#sql
+	notify_auth
 
 	#
 	#  Instead of sending the query to the SQL server,
@@ -802,6 +806,7 @@ post-auth {
 	Post-Auth-Type REJECT {
 		# log failed authentications in SQL, too.
 		-sql
+                notify_auth
 		attr_filter.access_reject
 
 		# Insert EAP-Failure message if the request was
