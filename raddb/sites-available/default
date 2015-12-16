@@ -368,7 +368,7 @@ authorize {
 	#  is meant to mirror the "users" file.
 	#
 	#  See "Authorization Queries" in mods-available/sql
-	sql
+	-sql
 
 	#
 	#  If you are using /etc/smbpasswd, and are also doing
@@ -699,7 +699,7 @@ post-auth {
 	#  After authenticating the user, do another SQL query.
 	#
 	#  See "Authentication Logging Queries" in mods-available/sql
-	#sql
+	-sql
 	notify_auth
 
 	#
