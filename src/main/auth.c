@@ -316,7 +316,6 @@ int rad_postauth(REQUEST *request)
 
 	result = process_post_auth(postauth_type, request);
 
-        WARN("mike %d", result);
 
 	switch (result) {
 	/*
